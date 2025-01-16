@@ -1,4 +1,9 @@
 package com.ecommerce.service;
 
-public class AuthService {
+import com.ecommerce.response.SignupRequest;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface AuthService {
+    String createUser(SignupRequest request);
 }
