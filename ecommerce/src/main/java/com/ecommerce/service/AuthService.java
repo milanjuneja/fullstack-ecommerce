@@ -5,5 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AuthService {
-    String createUser(SignupRequest request);
+    String createUser(SignupRequest request) throws Exception;
+
+    void sendLoginOtp(String email) throws Exception;
 }
