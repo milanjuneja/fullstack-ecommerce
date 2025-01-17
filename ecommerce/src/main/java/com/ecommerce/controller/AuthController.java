@@ -1,14 +1,13 @@
 package com.ecommerce.controller;
 
 import com.ecommerce.domain.USER_ROLE;
-import com.ecommerce.modal.User;
 import com.ecommerce.modal.VerificationCode;
-import com.ecommerce.repository.UserRepository;
+import com.ecommerce.request.LoginRequest;
 import com.ecommerce.response.ApiResponse;
 import com.ecommerce.response.AuthResponse;
-import com.ecommerce.response.SignupRequest;
+import com.ecommerce.request.SignupRequest;
 import com.ecommerce.service.AuthService;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +41,15 @@ public class AuthController {
         response.setMessage("Otp sent successfully");
 
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    @PostMapping("/signing")
+    public ResponseEntity<AuthResponse> loginHandler(@RequestBody LoginRequest req) throws Exception {
+
+        AuthResponse authResponse = authService.signIn(req);
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
 
     }
 }
