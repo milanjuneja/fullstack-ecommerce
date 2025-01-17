@@ -2,6 +2,7 @@ package com.ecommerce.controller;
 
 import com.ecommerce.domain.USER_ROLE;
 import com.ecommerce.modal.VerificationCode;
+import com.ecommerce.request.LoginOtpRequest;
 import com.ecommerce.request.LoginRequest;
 import com.ecommerce.response.ApiResponse;
 import com.ecommerce.response.AuthResponse;
@@ -33,9 +34,9 @@ public class AuthController {
     }
 
     @PostMapping("/send/login-signup-otp")
-    public ResponseEntity<ApiResponse> sendOtpHandler(@RequestBody VerificationCode req) throws Exception {
+    public ResponseEntity<ApiResponse> sendOtpHandler(@RequestBody LoginOtpRequest req) throws Exception {
 
-        authService.sendLoginOtp(req.getEmail());
+        authService.sendLoginOtp(req.getEmail(), req.getRole());
         ApiResponse response = new ApiResponse();
 
         response.setMessage("Otp sent successfully");

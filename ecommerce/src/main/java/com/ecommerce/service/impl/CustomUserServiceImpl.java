@@ -24,7 +24,7 @@ public class CustomUserServiceImpl implements UserDetailsService {
 
     @Autowired
     private SellerRepository sellerRepository;
-    private static final String SELLER_PREFIX="seller";
+    private static final String SELLER_PREFIX="seller_";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
