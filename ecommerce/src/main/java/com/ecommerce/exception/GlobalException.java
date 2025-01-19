@@ -20,4 +20,14 @@ public class GlobalException {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 
     }
+    @ExceptionHandler(ProductException.class)
+    public ResponseEntity<ErrorDetails> productExceptionHandler(SellerException se, WebRequest request){
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setError(se.getMessage());
+        errorDetails.setDetails(request.getDescription(false));
+        errorDetails.setTimeStamp(LocalDateTime.now());
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+
+    }
 }
