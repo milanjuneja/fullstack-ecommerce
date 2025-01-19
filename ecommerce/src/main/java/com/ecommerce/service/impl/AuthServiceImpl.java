@@ -153,6 +153,8 @@ public class AuthServiceImpl implements AuthService {
         UserDetails userDetails = customUserService.loadUserByUsername(username);
         if(userDetails == null)
             throw new BadCredentialsException("Invalid username or password");
+        if(username.startsWith("seller"))
+            username = username.substring(7);
         VerificationCode verificationCode = verificationCodeRepository.findByEmail(username);
         if(verificationCode == null || !verificationCode.getOtp().equals(otp))
             throw new BadCredentialsException("Wrong otp");

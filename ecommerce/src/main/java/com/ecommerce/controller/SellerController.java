@@ -2,6 +2,7 @@ package com.ecommerce.controller;
 
 import com.ecommerce.config.JwtProvider;
 import com.ecommerce.domain.AccountStatus;
+import com.ecommerce.exception.SellerException;
 import com.ecommerce.modal.Seller;
 import com.ecommerce.modal.SellerReport;
 import com.ecommerce.modal.VerificationCode;
@@ -36,9 +37,6 @@ public class SellerController {
 
     @Autowired
     private SellerService sellerService;
-
-    @Autowired
-    private OtpUtil otpUtil;
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -73,14 +71,14 @@ public class SellerController {
         verificationCodeRepository.save(verificationCode);
 
         String subject = "Email verification Code";
-        String text = "verify your account using this link";
+        String text = "verify your account using this link ";
         String frontEndUrl = "http://localhost:3000/verify-seller/";
         emailService.sendVerificationOtpEmail(seller.getEmail(), verificationCode.getOtp(), subject, text + frontEndUrl);
         return new ResponseEntity<>(savedSeller, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Seller> getSellerById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Seller> getSellerById(@PathVariable Long id) throws SellerException {
         return new ResponseEntity<>(sellerService.getSellerById(id), HttpStatus.OK);
     }
 

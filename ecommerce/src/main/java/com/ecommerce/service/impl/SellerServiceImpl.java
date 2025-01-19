@@ -3,6 +3,7 @@ package com.ecommerce.service.impl;
 import com.ecommerce.config.JwtProvider;
 import com.ecommerce.domain.AccountStatus;
 import com.ecommerce.domain.USER_ROLE;
+import com.ecommerce.exception.SellerException;
 import com.ecommerce.modal.Address;
 import com.ecommerce.modal.Seller;
 import com.ecommerce.repository.AddressRepository;
@@ -56,9 +57,9 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public Seller getSellerById(Long id) throws Exception {
+    public Seller getSellerById(Long id) throws SellerException {
         return sellerRepository.findById(id)
-                .orElseThrow(() -> new Exception("Seller not found with id - " + id));
+                .orElseThrow(() -> new SellerException("Seller not found with id - " + id));
     }
 
     @Override

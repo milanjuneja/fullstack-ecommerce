@@ -1,6 +1,7 @@
 package com.ecommerce.service;
 
 import com.ecommerce.domain.AccountStatus;
+import com.ecommerce.exception.SellerException;
 import com.ecommerce.modal.Seller;
 import org.hibernate.mapping.Selectable;
 
@@ -10,7 +11,7 @@ public interface SellerService {
 
     Seller getSellerProfileFromJwt(String jwt) throws Exception;
     Seller createSeller(Seller seller) throws Exception;
-    Seller getSellerById(Long id) throws Exception;
+    Seller getSellerById(Long id) throws SellerException;
     Seller getSellerByEmail(String email) throws Exception;
     List<Seller> getAllSellers(AccountStatus status);
 
