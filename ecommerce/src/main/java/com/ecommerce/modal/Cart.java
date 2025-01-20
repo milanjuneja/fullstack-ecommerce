@@ -27,18 +27,6 @@ public class Cart {
     private int discount;
     private String couponCode;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Cart cart = (Cart) o;
-        return Double.compare(cart.totalSellingPrice, totalSellingPrice) == 0 && totalItems == cart.totalItems && Double.compare(cart.totalMrpPrice, totalMrpPrice) == 0 && discount == cart.discount && Objects.equals(id, cart.id) && Objects.equals(user, cart.user) && Objects.equals(cartItems, cart.cartItems) && Objects.equals(couponCode, cart.couponCode);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, user, cartItems, totalSellingPrice, totalItems, totalMrpPrice, discount, couponCode);
-    }
 
     public Long getId() {
         return id;
