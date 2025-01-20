@@ -108,12 +108,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> searchProducts(String query) {
-        productRepository.searchProduct(query);
-        return null;
+        return productRepository.searchProduct(query);
+
     }
 
     @Override
-    public Page<Product> getAllProducts(String category, String brand, String colors, String sizes, Integer minPrice, Integer maxPrice, Integer minDiscount, String sort, String stock, Integer pageNumber) {
+    public Page<Product> getAllProducts(String category, String brand, String color, String sizes, Integer minPrice, Integer maxPrice, Integer minDiscount, String sort, String stock, Integer pageNumber) {
         Specification<Product> spec = ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if(category != null) {
@@ -122,8 +122,8 @@ public class ProductServiceImpl implements ProductService {
             }
             if(brand != null && !brand.isEmpty())
                 predicates.add(criteriaBuilder.equal(root.get("brand"),brand));
-            if(colors != null && !colors.isEmpty())
-                predicates.add(criteriaBuilder.equal(root.get("colors"),colors));
+            if(color != null && !color.isEmpty())
+                predicates.add(criteriaBuilder.equal(root.get("color"),color));
             if(sizes != null && !sizes.isEmpty())
                 predicates.add(criteriaBuilder.equal(root.get("sizes"),sizes));
             if(minPrice != null)
