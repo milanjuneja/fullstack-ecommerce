@@ -6,16 +6,14 @@ import com.ecommerce.exception.SellerException;
 import com.ecommerce.modal.Seller;
 import com.ecommerce.modal.SellerReport;
 import com.ecommerce.modal.VerificationCode;
-import com.ecommerce.request.LoginOtpRequest;
 import com.ecommerce.request.LoginRequest;
-import com.ecommerce.response.ApiResponse;
 import com.ecommerce.response.AuthResponse;
-import com.ecommerce.response.VerificationCodeRepository;
+import com.ecommerce.repository.VerificationCodeRepository;
 import com.ecommerce.service.AuthService;
 import com.ecommerce.service.EmailService;
+import com.ecommerce.service.SellerReportService;
 import com.ecommerce.service.SellerService;
 import com.ecommerce.utils.OtpUtil;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +39,9 @@ public class SellerController {
     private EmailService emailService;
     @Autowired
     private JwtProvider jwtProvider;
+
+    @Autowired
+    private SellerReportService sellerReportService;
 
 
     @PostMapping("/login")
@@ -88,8 +89,9 @@ public class SellerController {
     }
 
     @GetMapping("/report")
-    public ResponseEntity<SellerReport> getSellerReport(@RequestHeader("Authorization") String jwt){
-        return null;
+    public ResponseEntity<SellerReport> getSellerReport(@RequestHeader("Authorization") String jwt) throws Exception {
+        Seller seller = sellerService.getSellerProfileFromJwt(jwt);
+        return new ResponseEntity<>(sellerReportService.getSellerReport(seller), HttpStatus.OK);
     }
 
     @GetMapping

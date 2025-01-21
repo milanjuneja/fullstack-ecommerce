@@ -12,7 +12,7 @@ import com.ecommerce.repository.UserRepository;
 import com.ecommerce.request.LoginRequest;
 import com.ecommerce.request.SignupRequest;
 import com.ecommerce.response.AuthResponse;
-import com.ecommerce.response.VerificationCodeRepository;
+import com.ecommerce.repository.VerificationCodeRepository;
 import com.ecommerce.service.AuthService;
 import com.ecommerce.service.EmailService;
 import com.ecommerce.utils.OtpUtil;

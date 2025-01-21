@@ -1,4 +1,4 @@
-package com.ecommerce.response;
+package com.ecommerce.repository;
 
 import com.ecommerce.modal.VerificationCode;
 import org.springframework.data.jpa.repository.JpaRepository;
