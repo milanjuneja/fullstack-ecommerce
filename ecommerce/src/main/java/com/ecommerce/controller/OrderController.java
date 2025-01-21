@@ -2,8 +2,10 @@ package com.ecommerce.controller;
 
 import com.ecommerce.domain.PaymentMethod;
 import com.ecommerce.modal.*;
+import com.ecommerce.repository.PaymentOrderRepository;
 import com.ecommerce.response.PaymentLinkResponse;
 import com.ecommerce.service.*;
+import com.razorpay.PaymentLink;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,10 @@ public class OrderController {
 
     @Autowired
     private SellerReportService sellerReportService;
+    @Autowired
+    private PaymentService paymentService;
+    @Autowired
+    private PaymentOrderRepository paymentOrderRepository;
 
     @PostMapping
     public ResponseEntity<PaymentLinkResponse> createOrder(
@@ -40,9 +46,28 @@ public class OrderController {
         User user = userService.findUserByJwtToken(jwt);
         Cart cart = cartService.findUserCart(user);
         Set<Order> orders = orderService.createOrder(user, shippingAddress, cart);
-//        PaymentOrder paymentOrder = paymentService.createOrder(user, orders);
+        PaymentOrder paymentOrder = paymentService.createOrder(user, orders);
 
         PaymentLinkResponse res = new PaymentLinkResponse();
+        if(paymentMethod.equals(PaymentMethod.RAZORPAY)){
+            PaymentLink paymentLink = paymentService.createRazorpayPaymentLink(
+                user, paymentOrder.getAmount(), paymentOrder.getId()
+            );
+
+            String paymentUrl = paymentLink.get("short_url");
+            String paymentUrlId = paymentLink.get("id");
+            res.setPayment_link_id(paymentUrl);
+            paymentOrder.setPaymentLinkId(paymentUrlId);
+            paymentOrderRepository.save(paymentOrder);
+
+        }
+        else {
+            String paymentUrl = paymentService.createStripePaymentLink(user,
+                    paymentOrder.getAmount(),
+                    paymentOrder.getId());
+
+            res.setPayment_link_url(paymentUrl);
+        }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
