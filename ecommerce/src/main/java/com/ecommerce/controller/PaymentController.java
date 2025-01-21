@@ -1,4 +1,4 @@
-package com.ecommerce.repository;
+package com.ecommerce.controller;
 
 import com.ecommerce.modal.*;
 import com.ecommerce.response.ApiResponse;
