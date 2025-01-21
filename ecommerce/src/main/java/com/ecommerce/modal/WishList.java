@@ -7,11 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode
 public class WishList {
 
     @Id
@@ -24,4 +19,36 @@ public class WishList {
     @ManyToMany
     private Set<Product> products = new HashSet<>();
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+
+    public WishList() {
+    }
+
+    public WishList(Long id, User user, Set<Product> products) {
+        this.id = id;
+        this.user = user;
+        this.products = products;
+    }
 }
