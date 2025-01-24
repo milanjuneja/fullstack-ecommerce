@@ -13,6 +13,8 @@ import {
   WorkspacePremium,
 } from "@mui/icons-material";
 import SimilarProduct from "./SimilarProduct";
+import Review from "../Review/Review";
+import ReviewCard from "../Review/ReviewCard";
 
 const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
@@ -123,6 +125,11 @@ const ProductDetail = () => {
               nobis fugiat esse magnam, veritatis ex vel consequatur voluptatem
               ad! Nesciunt.
             </p>
+          </div>
+
+          <div className="mt-12 space-y-5">
+            <ReviewCard />
+            <Divider />
           </div>
         </section>
       </div>
