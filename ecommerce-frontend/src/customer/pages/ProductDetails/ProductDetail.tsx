@@ -12,6 +12,7 @@ import {
   Wallet,
   WorkspacePremium,
 } from "@mui/icons-material";
+import SimilarProduct from "./SimilarProduct";
 
 const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
@@ -125,6 +126,13 @@ const ProductDetail = () => {
           </div>
         </section>
       </div>
+
+      <div className="mt-20">
+        <h1 className="text-lg font-bold">Similar Product</h1>
+        <div className="pt-5"><SimilarProduct /></div>
+        
+      </div>
+
     </div>
   );
 };
