@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import FilterSection from "./FilterSection";
 import ProductCard from "./ProductCard";
 import {
@@ -8,6 +8,7 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
+  Pagination,
   Select,
   useMediaQuery,
   useTheme,
@@ -18,8 +19,15 @@ const Product = () => {
   const theme = useTheme();
   const isLarge = useMediaQuery(theme.breakpoints.up("lg"));
   const [sort, setSort] = React.useState();
+
+  const [page, setPage] = useState(1);
+
   const handleSortChange = (event: any) => {
     setSort(event.target.value);
+  };
+
+  const handlePageChange = (value: any) => {
+    setPage(value);
   };
 
   return (
@@ -65,9 +73,17 @@ const Product = () => {
           </div>
           <Divider />
           <section className="product_section grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-5 px-5">
-            {[1,1,1,1,1,1,11,1,1,1,1,1,1,11,1,1,].map(()=><ProductCard />)}
-            
+            {[1, 1, 1, 1, 1, 1, 11, 1, 1, 1, 1, 1, 1, 11, 1, 1].map(() => (
+              <ProductCard />
+            ))}
           </section>
+          <div className="flex justify-center py-10">
+            <Pagination
+              onChange={(value) => handlePageChange(value)}
+              count={10}
+              shape="rounded" color="primary"
+            />
+          </div>
         </div>
       </div>
     </div>
