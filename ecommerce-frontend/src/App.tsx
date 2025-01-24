@@ -6,6 +6,7 @@ import Home from "./customer/pages/Home/Home"
 import Product from "./customer/pages/Product/Product"
 import ProductDetail from "./customer/pages/ProductDetails/ProductDetail"
 import Review from "./customer/pages/Review/Review"
+import Cart from "./customer/pages/Cart/Cart"
 
 function App() {
   
@@ -17,7 +18,8 @@ function App() {
         {/* <Home /> */}
         {/* <Product  /> */}
         {/* <ProductDetail /> */}
-        <Review />
+        {/* <Review /> */}
+        <Cart />
       </div>
     </ThemeProvider>
       
