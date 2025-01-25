@@ -8,6 +8,7 @@ import ProductDetail from "./customer/pages/ProductDetails/ProductDetail"
 import Review from "./customer/pages/Review/Review"
 import Cart from "./customer/pages/Cart/Cart"
 import Checkout from "./customer/pages/Checkout/Checkout"
+import Account from "./customer/pages/Account/Account"
 
 function App() {
   
@@ -21,7 +22,8 @@ function App() {
         {/* <ProductDetail /> */}
         {/* <Review /> */}
         {/* <Cart /> */}
-        <Checkout />
+        {/* <Checkout /> */}
+        <Account />
       </div>
     </ThemeProvider>
       
