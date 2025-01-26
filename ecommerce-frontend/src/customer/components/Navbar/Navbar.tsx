@@ -93,6 +93,7 @@ function Navbar() {
                 startIcon={<StorefrontIcon />}
                 variant="outlined"
                 className="hidden lg:block"
+                onClick={() => navigate("/become-seller")}
               >
                 Become seller
               </Button>
