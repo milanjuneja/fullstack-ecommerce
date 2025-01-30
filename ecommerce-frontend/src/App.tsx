@@ -15,18 +15,25 @@ import AdminDashboard from "./admin/Pages/Dashboard/AdminDashboard";
 import store, { useAppDispatch, useAppSelector } from "./State/Store";
 import { useEffect } from "react";
 import { getSellerByJwt } from "./State/seller/sellerSlice";
+import Auth from "./customer/pages/Auth/Auth";
+import { fetchUserProfile } from "./State/AuthSlice";
 
 function App() {
   const dispatch = useAppDispatch();
-  const {seller} = useAppSelector(store=> store);
+  const {seller, auth} = useAppSelector(store=> store);
   const navigate = useNavigate();
-  useEffect(() => {
-    dispatch(getSellerByJwt(localStorage.getItem("jwt") || ""))
-  }, [])
+  // useEffect(() => {
+  //   dispatch(getSellerByJwt(localStorage.getItem("jwt") || ""))
+  // }, [])
+
+  // useEffect(() => {
+  //   if(seller.profile) navigate("/seller")
+  // },[seller.profile])
 
   useEffect(() => {
-    if(seller.profile) navigate("/seller")
-  },[seller.profile])
+    dispatch(fetchUserProfile({jwt: auth.jwt ||  localStorage.getItem('jwt')}))
+  }, [auth.jwt])
+
   return (
     <>
       <ThemeProvider theme={CustomTheme}>
@@ -34,6 +41,7 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Auth />}/>
             <Route path="/products/:category" element={<Product />} />
             <Route path="/reviews/:productId" element={<Review />} />
             <Route

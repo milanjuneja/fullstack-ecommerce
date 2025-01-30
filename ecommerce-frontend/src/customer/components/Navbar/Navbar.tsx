@@ -15,12 +15,14 @@ import CategorySheet from "./CategorySheet";
 import { MainCategory } from "../../../data/category/MainCategory";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../../State/Store";
 function Navbar() {
   const theme = useTheme();
   const navigate = useNavigate();
   const isLarge = useMediaQuery(theme.breakpoints.up("lg"));
   const [selectredCategory, setSelectedCategory] = useState("men");
   const [showCategorySheet, setShowCategorySheet] = useState(false);
+  const {auth} = useAppSelector(store=>store);
 
   return (
     <>
@@ -62,7 +64,7 @@ function Navbar() {
             <IconButton>
               <SearchIcon />
             </IconButton>
-            {true ? (
+            {auth.user ? (
               <>
                 <Button
                   onClick={() => navigate("/account/orders")}
@@ -72,11 +74,11 @@ function Navbar() {
                     sx={{ width: 29, height: 29 }}
                     src="https://png.pngtree.com/png-vector/20230831/ourmid/pngtree-man-avatar-image-for-profile-png-image_9197908.png"
                   />
-                  <h1 className="font-semibold hidden lg:block">User</h1>
+                  <h1 className="font-semibold hidden lg:block">{auth.user?.firstName + ' ' + auth.user?.lastName}</h1>
                 </Button>
               </>
             ) : (
-              <Button variant="contained">Login</Button>
+              <Button onClick={()=> navigate('/login')} variant="contained">Login</Button>
             )}
             <IconButton>
               <FavoriteBorderIcon sx={{ fontSize: 29 }} />
