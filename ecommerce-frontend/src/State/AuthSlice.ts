@@ -24,3 +24,12 @@ export const signin = createAsyncThunk<any, any>(
     }
   }
 );
+
+export const logout = createAsyncThunk<any, any>("/auth/logout", async(navigate, {rejectWithValue}) => {
+  try {
+    localStorage.clear();
+    navigate("/")
+  } catch (error) {
+    
+  }
+})

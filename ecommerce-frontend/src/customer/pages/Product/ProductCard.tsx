@@ -3,21 +3,19 @@ import "./ProductCard.css";
 import { Button } from "@mui/material";
 import { Favorite, ModeComment } from "@mui/icons-material";
 import { teal } from "@mui/material/colors";
+import { Product } from "../../../types/ProductTypes";
+import { useNavigate } from "react-router-dom";
 
-const images = [
-  "https://veirdo.in/cdn/shop/files/Artboard8.png?v=1724158576",
-  "https://assets.ajio.com/medias/sys_master/root/20230629/nDDs/649cd4e8a9b42d15c91c7cc3/-473Wx593H-466021226-black-MODEL.jpg",
-];
-
-const ProductCard = () => {
+const ProductCard = ({item}:{item:Product}) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let interval: any;
     if (isHovered) {
       interval = setInterval(() => {
-        setCurrentImage((prevImage) => (prevImage + 1) % images.length);
+        setCurrentImage((prevImage) => (prevImage + 1) % item.images.length);
       }, 1000);
     } else if (interval) {
       clearInterval(interval);
@@ -28,13 +26,13 @@ const ProductCard = () => {
 
   return (
     <>
-      <div className="group relative px-4">
+      <div onClick={()=> navigate(`/product-details/${item.category.categoryId}/${item.title}/${item.id}`)} className="group relative px-4">
         <div
           className="card"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {images.map((image, index) => (
+          {item.images.map((image, index) => (
             <img
               className="card-media object-top"
               src={image}
@@ -63,15 +61,15 @@ const ProductCard = () => {
           </div>
           <div className="details pt-3 space-y-1 group-hover-effect rounded-md">
             <div className="name">
-              <h1>Nike</h1>
-              <p>Blue shirt</p>
+              <h1>{item.seller?.businessDetails.businessName}</h1>
+              <p>{item.title}</p>
             </div>
             <div className="price flex items-center gap-3">
               <span className="font-sans text-gray-800">
-              ₹ 400
+              ₹ {item.sellingPrice}
               </span>
-              <span className="thin-line-through text-gray-400">₹ 999</span>
-              <span className="text-primary-color font-semibold">60%</span>
+              <span className="thin-line-through text-gray-400">₹ {item.mrpPrice}</span>
+              <span className="text-primary-color font-semibold">{item.discountPercentage}%</span>
             </div>
         </div>
       </div>
