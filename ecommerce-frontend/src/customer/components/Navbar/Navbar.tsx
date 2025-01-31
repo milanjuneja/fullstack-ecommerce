@@ -13,9 +13,9 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import CategorySheet from "./CategorySheet";
 import { MainCategory } from "../../../data/category/MainCategory";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../../State/Store";
+import { useAppDispatch, useAppSelector } from "../../../State/Store";
 function Navbar() {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ function Navbar() {
   const [selectredCategory, setSelectedCategory] = useState("men");
   const [showCategorySheet, setShowCategorySheet] = useState(false);
   const {auth} = useAppSelector(store=>store);
+ 
 
   return (
     <>

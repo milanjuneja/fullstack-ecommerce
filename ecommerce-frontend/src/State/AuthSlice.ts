@@ -73,7 +73,7 @@ export const logout = createAsyncThunk<any, any>(
 );
 
 interface AuthSate {
-  jwt: string | null;
+  jwt: any;
   otpSent: boolean;
   isLoggedIn: boolean;
   user: User | null;

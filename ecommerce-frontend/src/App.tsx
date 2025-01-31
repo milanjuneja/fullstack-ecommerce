@@ -17,6 +17,7 @@ import { useEffect } from "react";
 import { getSellerByJwt } from "./State/seller/sellerSlice";
 import Auth from "./customer/pages/Auth/Auth";
 import { fetchUserProfile } from "./State/AuthSlice";
+import PaymentSucces from "./customer/pages/PaymentSucces";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -54,6 +55,7 @@ function App() {
             <Route path="/account/*" element={<Account />} />
             <Route path="/seller/*" element={<SellerDashboard />} />
             <Route path="/admin/*" element={<AdminDashboard />} />
+            <Route path="/payment-success/:orderId" element={<PaymentSucces />} />
           </Routes>
         </div>
       </ThemeProvider>

@@ -69,7 +69,7 @@ public class PaymentServiceImpl implements PaymentService {
             RazorpayClient razorPay = new RazorpayClient(API_KEY, API_SECRET_KEY);
             Payment payment = razorPay.payments.fetch(paymentId);
             String status = payment.get("status");
-            if(status.equals("captures")){
+            if(status.equals("captured")){
                 Set<Order> orders = paymentOrder.getOrders();
                 for (Order order: orders) {
                     order.setPaymentStatus(PaymentStatus.COMPLETED);
@@ -104,7 +104,7 @@ public class PaymentServiceImpl implements PaymentService {
             notify.put("email", true);
             paymentLinkRequest.put("notify", notify);
 
-            paymentLinkRequest.put("callback_url", "http://localhost:3000/payment-success/"+orderId);
+            paymentLinkRequest.put("callback_url", "http://localhost:5173/payment-success/"+orderId);
             paymentLinkRequest.put("callback_method", "get");
 
             return razorPay.paymentLink.create(paymentLinkRequest);
