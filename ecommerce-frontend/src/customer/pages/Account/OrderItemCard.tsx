@@ -1,9 +1,10 @@
 import { ElectricBolt } from '@mui/icons-material'
 import { Avatar } from '@mui/material'
 import { teal } from '@mui/material/colors'
-import React from 'react'
+import { Order, OrderItem} from '../../../types/OrderTypes'
 
-const OrderItem = () => {
+const OrderItemCard = ({order, item}: {order:Order, item:OrderItem}) => {
+  
   return (
     <div className='text-sm bg-white p-5 space-y-4 border rounded-md cursor-pointer'>
       <div className='flex items-center gap-5'>
@@ -13,22 +14,22 @@ const OrderItem = () => {
           </Avatar>
         </div>
         <div>
-          <h1 className='font-bold text-primary-color'>PENDING</h1>
-          <p>Arriving By Mon, 15 Jan</p>
+          <h1 className='font-bold text-primary-color'>{order.orderStatus}</h1>
+          <p>{order.deliverDate}</p>
         </div>
       </div>
       <div className='p-5 bg-teal-50 flex gap-3'>
         <div>
           <img
           className='w-[70px]'
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQviH8Xx67eafq--Eq0txnGOhqpa2CSw0i07A&s" alt="" />
+          src={item.product.images[0]} alt="" />
         </div>
         <div className='w-full space-y2'>
-          <h1>Clothing</h1>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe quibusdam fugit vel corporis hic id dolorem. Quas, nulla earum atque maiores blanditiis porro itaque quidem hic rerum cumque. Deserunt, aliquid.</p>
+          <h1 className='font-bold'>{ item.product.seller.businessDetails.businessName}</h1>
+          <p>{item.product.title}</p>
           <p>
             <strong>size: </strong>
-            FREE
+            {item.size}
           </p>
         </div>
       </div>
@@ -37,4 +38,4 @@ const OrderItem = () => {
   )
 }
 
-export default OrderItem
+export default OrderItemCard
