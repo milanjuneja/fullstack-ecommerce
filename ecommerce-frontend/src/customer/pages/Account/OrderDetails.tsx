@@ -1,28 +1,36 @@
 import { Box, Button, Divider } from "@mui/material";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import OrderStepper from "./OrderStepper";
 import { Payments } from "@mui/icons-material";
+import { useAppDispatch, useAppSelector } from "../../../State/Store";
+import { fetchOrderById, fetchOrderItemById } from "../../../State/customer/orderSlice";
 const OrderDetails = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+const {orderId, orderItemId} = useParams();
+  const {order} = useAppSelector(store=>store);
+
+  useEffect(() => {
+    dispatch(fetchOrderById({orderId : Number(orderId), jwt: localStorage.getItem('jwt') || ""}))
+    dispatch(fetchOrderItemById({orderItemId:Number(orderItemId), jwt: localStorage.getItem('jwt') || ""}));
+  },[])
+
   return (
     <Box className="space-y-5">
       <section className="flex flex-col gap-5 justify-center items-center">
         <img
           className="w-[100px]"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQviH8Xx67eafq--Eq0txnGOhqpa2CSw0i07A&s"
+          src={order.orderItem?.product.images[0]}
           alt=""
         />
         <div className="text-sm space-y-1 text-center">
-          <h1 className="font-bold">Ram Clothing</h1>
+          <h1 className="font-bold">{order.orderItem?.product.seller.businessDetails.businessName}</h1>
           <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio
-            corrupti dolore itaque dolor in quam esse distinctio alias veritatis
-            impedit consequuntur, illo, dolorem sunt quidem ut nostrum!
-            Obcaecati, dolorum magni.
+            {order.orderItem?.product.title}
           </p>
           <p>
-            <strong>Size :</strong>M
+            <strong>Size :</strong>{order.orderItem?.size}
           </p>
         </div>
         <div>
@@ -39,11 +47,17 @@ const OrderDetails = () => {
         <h1 className="font-bold pb-3">Delivery Status</h1>
         <div className="text-sm space-y-2">
           <div className="flex gap-5 font-medium">
-            <p>User 1</p>
+            <p>{order.currentOrder?.shipmentAddress.name}</p>
             <Divider flexItem orientation="vertical"/>
-            <p>5235235252</p>
+            <p>{order.currentOrder?.shipmentAddress.mobile}</p>
           </div>
-          <p>jgkajg gakjgk gjakjgkja gja , Delhi - 24</p>
+          <p>
+            {order.currentOrder?.shipmentAddress.address}, {" "}
+            {order.currentOrder?.shipmentAddress.locality}, {" "}
+            {order.currentOrder?.shipmentAddress.city}, {" "}
+            {order.currentOrder?.shipmentAddress.state} {"-"}
+            {order.currentOrder?.shipmentAddress.pinCode}, {" "}
+          </p>
         </div>
       </div>
       <div className="border space-y-4">
@@ -53,7 +67,7 @@ const OrderDetails = () => {
             <p>You saved <span className="text-green-500 font-medium text-xs">Rs {699}.00</span> on this item</p>
 
           </div>
-          <p className="font-medium">Rs 899.00</p>
+          <p className="font-medium">Rs {order.orderItem?.sellingPrice}.00</p>
         </div>
         <div className="px-5">
           <div className="bg-teal-50 px-5 py-2 text-xs font-medium flex items-center gap-3">
@@ -63,7 +77,7 @@ const OrderDetails = () => {
         </div>
         <Divider />
         <div className="px-5 pb-5">
-          <p className="text-xs"><strong>Sold by: </strong>Ram Clothing</p>
+          <p className="text-xs"><strong>Sold by: </strong>{order.orderItem?.product.seller.businessDetails.businessName}</p>
         </div>
 
         <div className="p-10">
