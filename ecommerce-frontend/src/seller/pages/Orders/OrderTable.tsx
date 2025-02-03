@@ -1,12 +1,16 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import * as React from "react";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import store, { useAppDispatch, useAppSelector } from "../../../State/Store";
+import { fetchSellerOrders, updateOrderStatus } from "../../../State/seller/sellerOrderslice";
+import { Button, Menu, MenuItem } from "@mui/material";
+import { Label } from "@mui/icons-material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -19,34 +23,54 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
+  "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
   // hide last border
-  '&:last-child td, &:last-child th': {
+  "&:last-child td, &:last-child th": {
     border: 0,
   },
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
+const orderStatusColor = {
+  PENDING: { color: "#FFA500", label: "PENDING" },
+  PLACED: { color: "#0000FF", label: "PLACED" },
+  CONFIRMED: { color: "#008000", label: "CONFIRMED" },
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  SHIPPED: { color: "#1E90FF", label: "SHIPPED" },
+  DELIVERED: { color: "#32CD32", label: "DELIVERED" },
+  CANCELLED: { color: "#FF0000", label: "CANCELLED" },
+};
+
+const orderStatus = [
+  { color: "#FFA500", label: "PENDING" },
+  { color: "#0000FF", label: "PLACED" },
+  { color: "#008000", label: "CONFIRMED" },
+
+  { color: "#1E90FF", label: "SHIPPED" },
+  { color: "#32CD32", label: "DELIVERED" },
+  { color: "#FF0000", label: "CANCELLED" },
 ];
 
 export default function OrderTable() {
+  const dispatch = useAppDispatch();
+
+  const { sellerOrder } = useAppSelector((store) => store);
+
+  React.useEffect(() => {
+    dispatch(fetchSellerOrders(localStorage.getItem("jwt") || ""));
+  }, []);
+  const [anchorEl, setAnchorEl] = React.useState<null | any>({});
+  const open = Boolean(anchorEl);
+  const handleClick = (event: any, orderId: number) => {
+    setAnchorEl((prev: any) => ({ ...prev, [orderId]: event.currentTarget }));
+  };
+  const handleClose = (orderId: number) => {
+    setAnchorEl((prev: any) => ({ ...prev, [orderId]: null }));
+  };
+  const handleUpdateOrderStatus = (orderId: number, orderStatus:any) => {
+    dispatch(updateOrderStatus({jwt:localStorage.getItem('jwt') || "", orderId, orderStatus}))
+  }
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -60,15 +84,79 @@ export default function OrderTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
+          {sellerOrder.orders.map((order) => (
+            <StyledTableRow key={order.id}>
               <StyledTableCell component="th" scope="row">
-                {row.name}
+                {order.id}
               </StyledTableCell>
-              <StyledTableCell >{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
+              <StyledTableCell>
+                <div className="flex gap-1 flex-wrap">
+                  {order.orderItems.map((orderItem) => (
+                    <div className="flex gap-5">
+                      <img
+                        className="w-20 rounded-md"
+                        src={orderItem.product.images[0]}
+                        alt=""
+                      />
+                      <div className="flex flex-col justify-between py-2">
+                        <h1>Title: {orderItem.product.title}</h1>
+                        <h1>Selling Price: {orderItem.product.sellingPrice}</h1>
+                        <h1>Color: {orderItem.product.color}</h1>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                <div className="flex flex-col gap-y-2">
+                  <h1>{order.shipmentAddress.name}</h1>
+                  <h1>
+                    {order.shipmentAddress.address},{" "}
+                    {order.shipmentAddress.city}
+                  </h1>
+                  <h1>
+                    {order.shipmentAddress.state} -{" "}
+                    {order.shipmentAddress.pinCode}
+                  </h1>
+                  <h1>
+                    <strong>Mobile: </strong> {order.shipmentAddress.name}
+                  </h1>
+                </div>
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                <span className="px-5 py-2 border text-primary-color border-primary-color rounded-full">
+                  {order.orderStatus}
+                </span>
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                <Button
+                  id="basic-button"
+                  aria-controls={open ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={(e) => handleClick(e, Number(order.orderId))}
+                >
+                  Dashboard
+                </Button>
+                <Menu
+                  id={`status-menu ${order.id}`}
+                  anchorEl={anchorEl[order.id]}
+                  open={Boolean(anchorEl[order.id])}
+                  onClose={() => handleClose(order.id)}
+                  MenuListProps={{
+                    "aria-labelledby": `status-menu ${order.id}`,
+                  }}
+                >
+                  {orderStatus.map((item) => (
+                    <MenuItem
+                      key={item.label}
+                      onClick={() => handleUpdateOrderStatus(order.id, item.label)}
+                    >
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
