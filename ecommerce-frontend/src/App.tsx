@@ -24,13 +24,13 @@ function App() {
   const dispatch = useAppDispatch();
   const {seller, auth} = useAppSelector(store=> store);
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   dispatch(getSellerByJwt(localStorage.getItem("jwt") || ""))
-  // }, [])
+  useEffect(() => {
+    dispatch(getSellerByJwt(localStorage.getItem("jwt") || ""))
+  }, [])
 
-  // useEffect(() => {
-  //   if(seller.profile) navigate("/seller")
-  // },[seller.profile])
+  useEffect(() => {
+    if(seller.profile) navigate("/seller")
+  },[seller.profile])
 
   useEffect(() => {
     dispatch(fetchUserProfile({jwt: auth.jwt ||  localStorage.getItem('jwt')}))
