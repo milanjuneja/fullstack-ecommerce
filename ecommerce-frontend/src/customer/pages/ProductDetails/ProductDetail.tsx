@@ -17,6 +17,7 @@ import ReviewCard from "../Review/ReviewCard";
 import { useAppDispatch, useAppSelector } from "../../../State/Store";
 import { useParams } from "react-router-dom";
 import { fetchProductById } from "../../../State/customer/ProductSlice";
+import { additemToCart } from "../../../State/customer/cartSlice";
 
 const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
@@ -31,6 +32,10 @@ const ProductDetail = () => {
 
   const handleActiveImage = (value: number) => {
     setActiveImage(value)
+  }
+  const handleAddToCart = () =>{
+    // dispatch(additemToCart())
+    
   }
 
   return (
@@ -118,6 +123,7 @@ const ProductDetail = () => {
               sx={{ py: "1rem" }}
               variant="contained"
               color="primary"
+              onClick={()=> handleAddToCart()}
             >
               Add To Cart
             </Button>

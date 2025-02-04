@@ -42,7 +42,7 @@ export default function TransactionTable() {
         <TableHead>
           <TableRow>
             <StyledTableCell>Date</StyledTableCell>
-            <StyledTableCell align="right">Customer Details</StyledTableCell>
+            <StyledTableCell >Customer Details</StyledTableCell>
             <StyledTableCell align="right">Order</StyledTableCell>
             <StyledTableCell align="right">Amount</StyledTableCell>
           </TableRow>

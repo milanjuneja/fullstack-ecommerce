@@ -8,11 +8,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { validateDate } from "@mui/x-date-pickers";
 import { useFormik } from "formik";
-import React from "react";
+import { useAppDispatch, useAppSelector } from "../../../State/Store";
+import { discount } from "../../../data/filter/discount";
+import { createDeal } from "../../../State/admin/dealSlice";
+
 
 const CreateDealForm = () => {
+  const dispatch = useAppDispatch();
+  const {customer} = useAppSelector(store=>store);
   const formik = useFormik({
     initialValues: {
       discount: 0,
@@ -20,8 +24,16 @@ const CreateDealForm = () => {
     },
     onSubmit: (values) => {
       console.log(values);
+      const reqData = {
+        discount:values.discount,
+        category:{
+          id:values.category
+        }
+      }
+      dispatch(createDeal(reqData))
     },
   });
+  
   return (
     <Box
       className="space-y-6"
@@ -49,7 +61,8 @@ const CreateDealForm = () => {
           label="Category"
           onChange={formik.handleChange}
         >
-          <MenuItem value={10}>Ten</MenuItem>
+          {customer.homePageData?.dealCategories.map((item)=>
+          <MenuItem value={item.id}>{item.name}</MenuItem>)}
         </Select>
       </FormControl>
       <Button fullWidth sx={{py:'.9rem'}} type="submit" variant="contained">Create Deal</Button>

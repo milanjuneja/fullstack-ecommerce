@@ -8,7 +8,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import store, { useAppDispatch, useAppSelector } from "../../../State/Store";
-import { fetchSellerOrders, updateOrderStatus } from "../../../State/seller/sellerOrderslice";
+import {
+  fetchSellerOrders,
+  updateOrderStatus,
+} from "../../../State/seller/sellerOrderslice";
 import { Button, Menu, MenuItem } from "@mui/material";
 import { Label } from "@mui/icons-material";
 
@@ -65,12 +68,18 @@ export default function OrderTable() {
   const handleClick = (event: any, orderId: number) => {
     setAnchorEl((prev: any) => ({ ...prev, [orderId]: event.currentTarget }));
   };
-  const handleClose = (orderId: number) => {
+  const handleClose = (orderId: number) => () =>  {
     setAnchorEl((prev: any) => ({ ...prev, [orderId]: null }));
   };
-  const handleUpdateOrderStatus = (orderId: number, orderStatus:any) => {
-    dispatch(updateOrderStatus({jwt:localStorage.getItem('jwt') || "", orderId, orderStatus}))
-  }
+  const handleUpdateOrderStatus = (orderId: number, orderStatus: any) => {
+    dispatch(
+      updateOrderStatus({
+        jwt: localStorage.getItem("jwt") || "",
+        orderId,
+        orderStatus,
+      })
+    );
+  };
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -130,19 +139,15 @@ export default function OrderTable() {
               </StyledTableCell>
               <StyledTableCell align="right">
                 <Button
-                  id="basic-button"
-                  aria-controls={open ? "basic-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
                   onClick={(e) => handleClick(e, Number(order.orderId))}
                 >
-                  Dashboard
+                  Status
                 </Button>
                 <Menu
                   id={`status-menu ${order.id}`}
                   anchorEl={anchorEl[order.id]}
                   open={Boolean(anchorEl[order.id])}
-                  onClose={() => handleClose(order.id)}
+                  onClose={handleClose(order.id)}
                   MenuListProps={{
                     "aria-labelledby": `status-menu ${order.id}`,
                   }}
@@ -150,7 +155,9 @@ export default function OrderTable() {
                   {orderStatus.map((item) => (
                     <MenuItem
                       key={item.label}
-                      onClick={() => handleUpdateOrderStatus(order.id, item.label)}
+                      onClick={() =>
+                        handleUpdateOrderStatus(order.id, item.label)
+                      }
                     >
                       {item.label}
                     </MenuItem>

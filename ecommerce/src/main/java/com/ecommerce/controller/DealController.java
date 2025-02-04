@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin/deals")
 public class DealController {
@@ -15,6 +17,10 @@ public class DealController {
     @Autowired
     private DealService dealService;
 
+    @GetMapping
+    public ResponseEntity<List<Deal>> getAllDeals(@RequestHeader("Authorization") String jwt){
+        return new ResponseEntity<>(dealService.getDeals(), HttpStatus.ACCEPTED);
+    }
     @PostMapping
     public ResponseEntity<Deal> createDeal(@RequestBody Deal deal){
         return new ResponseEntity<>(dealService.createDeal(deal), HttpStatus.ACCEPTED);

@@ -1,10 +1,9 @@
 import { Add, Close, Remove } from "@mui/icons-material";
 import { Button, Divider, IconButton } from "@mui/material";
-import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../State/Store";
+import { useAppDispatch } from "../../../State/Store";
 import { CartItem as CartItems } from "../../../types/CartTypes";
 import {
-  fetchUserCart,
+  deleteCartItem,
   updateCartItem,
 } from "../../../State/customer/cartSlice";
 
@@ -16,6 +15,15 @@ const CartItem = ({ item }: { item: CartItems }) => {
         jwt: localStorage.getItem("jwt"),
         cartItemId: item.id,
         cartItem: { quantity: item.quantity + value },
+      })
+    );
+  };
+
+  const handleDeleteCartItem = () => {
+    dispatch(
+      deleteCartItem({
+        jwt: localStorage.getItem("jwt") || "",
+        cartItemId: item.id,
       })
     );
   };
@@ -51,11 +59,14 @@ const CartItem = ({ item }: { item: CartItems }) => {
       <div className="flex justify-between items-center">
         <div className="px-5 py-2 flex justify-between items-center">
           <div className="flex items-center gap-2 w-[140px] justify-between">
-            <Button disabled={item.quantity === 1} onClick={()=>handleUpdateQuantity(-1)}>
+            <Button
+              disabled={item.quantity === 1}
+              onClick={() => handleUpdateQuantity(-1)}
+            >
               <Remove />
             </Button>
             <span>{item.quantity}</span>
-            <Button onClick={()=>handleUpdateQuantity(1)}>
+            <Button onClick={() => handleUpdateQuantity(1)}>
               <Add />
             </Button>
           </div>
@@ -66,7 +77,7 @@ const CartItem = ({ item }: { item: CartItems }) => {
         </div>
       </div>
       <div className="absolute top-1 right-1">
-        <IconButton color="primary">
+        <IconButton onClick={() => handleDeleteCartItem()} color="primary">
           <Close />
         </IconButton>
       </div>

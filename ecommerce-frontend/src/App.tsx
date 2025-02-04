@@ -19,22 +19,27 @@ import Auth from "./customer/pages/Auth/Auth";
 import { fetchUserProfile } from "./State/AuthSlice";
 import PaymentSucces from "./customer/pages/PaymentSucces";
 import Wishlist from "./customer/pages/Wishlist/Wishlist";
+import { createHomeCategories } from "./State/customer/customerSlice";
+import { homeCategories } from "./data/HomeCategories";
 
 function App() {
   const dispatch = useAppDispatch();
-  const {seller, auth} = useAppSelector(store=> store);
+  const { seller, auth } = useAppSelector((store) => store);
   const navigate = useNavigate();
   useEffect(() => {
-    dispatch(getSellerByJwt(localStorage.getItem("jwt") || ""))
-  }, [])
+    dispatch(getSellerByJwt(localStorage.getItem("jwt") || ""));
+    dispatch(createHomeCategories(homeCategories));
+  }, []);
 
   useEffect(() => {
-    if(seller.profile) navigate("/seller")
-  },[seller.profile])
+    if (seller.profile) navigate("/seller");
+  }, [seller.profile]);
 
   useEffect(() => {
-    dispatch(fetchUserProfile({jwt: auth.jwt ||  localStorage.getItem('jwt')}))
-  }, [auth.jwt])
+    dispatch(
+      fetchUserProfile({ jwt: auth.jwt || localStorage.getItem("jwt") })
+    );
+  }, [auth.jwt]);
 
   return (
     <>
@@ -43,7 +48,7 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Auth />}/>
+            <Route path="/login" element={<Auth />} />
             <Route path="/products/:category" element={<Product />} />
             <Route path="/reviews/:productId" element={<Review />} />
             <Route
@@ -56,8 +61,11 @@ function App() {
             <Route path="/account/*" element={<Account />} />
             <Route path="/seller/*" element={<SellerDashboard />} />
             <Route path="/admin/*" element={<AdminDashboard />} />
-            <Route path="/payment-success/:orderId" element={<PaymentSucces />} />
-            <Route path="/wishlist" element={<Wishlist />}/>
+            <Route
+              path="/payment-success/:orderId"
+              element={<PaymentSucces />}
+            />
+            <Route path="/wishlist" element={<Wishlist />} />
           </Routes>
         </div>
       </ThemeProvider>
