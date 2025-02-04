@@ -49,13 +49,13 @@ public class AdminCouponController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteCoupon(@PathVariable Long id) throws Exception {
+    public ResponseEntity<?> deleteCoupon(@PathVariable Long id, @RequestHeader("Authorization") String jwt) throws Exception {
         couponService.deleteCoupon(id);
         return ResponseEntity.ok("Coupon deleted successfully");
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Coupon>> getAllCoupons(){
+    public ResponseEntity<List<Coupon>> getAllCoupons(@RequestHeader("Authorization") String jwt){
         return new ResponseEntity<>(couponService.findAllCoupons(), HttpStatus.OK);
     }
 

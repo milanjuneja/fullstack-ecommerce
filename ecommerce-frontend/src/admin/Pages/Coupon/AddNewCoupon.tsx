@@ -1,9 +1,10 @@
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { Dayjs } from "dayjs";
 import { useFormik } from "formik";
-import React from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Box, Button, Grid2, TextField } from "@mui/material";
+import { useAppDispatch } from "../../../State/Store";
+import { createCoupon } from "../../../State/admin/adminCouponSlice";
 
 interface CouponFormValues {
   code: string;
@@ -14,6 +15,7 @@ interface CouponFormValues {
 }
 
 const AddNewCoupon = () => {
+  const dispatch = useAppDispatch();
   const formik = useFormik<CouponFormValues>({
     initialValues: {
       code: "",
@@ -26,15 +28,24 @@ const AddNewCoupon = () => {
       console.log(values);
       const formattedValues = {
         ...values,
-        ValidityStartDate: values.validityStartDate?.toISOString(),
-        validityEndDate: values.validityEndDate?.toISOString,
+        validityStartDate: values.validityStartDate
+          ? values.validityStartDate.toISOString()
+          : null,
+        validityEndDate: values.validityEndDate
+          ? values.validityEndDate.toISOString()
+          : null,
       };
       console.log(formattedValues);
+      dispatch(
+        createCoupon({ jwt: localStorage.getItem("jwt") || "", coupon: values })
+      );
     },
   });
   return (
     <div>
-      <h1 className="text-2xl font-bold text-primary-color pb-5 text-center">Create New Coupon</h1>
+      <h1 className="text-2xl font-bold text-primary-color pb-5 text-center">
+        Create New Coupon
+      </h1>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Box component={"form"} onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
           <Grid2 container spacing={2}>
@@ -57,33 +68,39 @@ const AddNewCoupon = () => {
                 label="Discount Percentage"
                 value={formik.values.discountPercentage}
                 onChange={formik.handleChange}
-                error={formik.touched.discountPercentage && Boolean(formik.errors.discountPercentage)}
-                helperText={formik.touched.discountPercentage && formik.errors.discountPercentage}
+                error={
+                  formik.touched.discountPercentage &&
+                  Boolean(formik.errors.discountPercentage)
+                }
+                helperText={
+                  formik.touched.discountPercentage &&
+                  formik.errors.discountPercentage
+                }
               />
             </Grid2>
 
             <Grid2 size={{ xs: 12, sm: 6 }}>
               <DatePicker
-              onChange={formik.handleChange}
-              name="validityStartDate"
-              sx={{width:"100%"}}
-              label="Validity Start Date"
-              value={formik.values.validityStartDate}
-              >
-
-
-              </DatePicker>
+                name="validityStartDate"
+                sx={{ width: "100%" }}
+                label="Validity Start Date"
+                value={formik.values.validityStartDate}
+                onChange={(date) =>
+                  formik.setFieldValue("validityStartDate", date)
+                }
+              />
             </Grid2>
 
             <Grid2 size={{ xs: 12, sm: 6 }}>
               <DatePicker
-              onChange={formik.handleChange}
-              name="validityEndDate"
-              sx={{width:"100%"}}
-              label="Validity End Date"
-              value={formik.values.validityEndDate}
-              >
-              </DatePicker>
+                onChange={(date) =>
+                  formik.setFieldValue("validityEndDate", date)
+                }
+                name="validityEndDate"
+                sx={{ width: "100%" }}
+                label="Validity End Date"
+                value={formik.values.validityEndDate}
+              ></DatePicker>
             </Grid2>
 
             <Grid2 size={{ xs: 12 }}>
@@ -94,16 +111,26 @@ const AddNewCoupon = () => {
                 label="Minimum Order Value"
                 value={formik.values.minimumOrderValue}
                 onChange={formik.handleChange}
-                error={formik.touched.minimumOrderValue && Boolean(formik.errors.minimumOrderValue)}
-                helperText={formik.touched.minimumOrderValue && formik.errors.minimumOrderValue}
+                error={
+                  formik.touched.minimumOrderValue &&
+                  Boolean(formik.errors.minimumOrderValue)
+                }
+                helperText={
+                  formik.touched.minimumOrderValue &&
+                  formik.errors.minimumOrderValue
+                }
               />
             </Grid2>
-            <Grid2 size={{xs:12}}>
-              <Button variant="contained" fullWidth sx={{py:".8rem"}}>
+            <Grid2 size={{ xs: 12 }}>
+              <Button
+                onClick={() => formik.handleSubmit()}
+                variant="contained"
+                fullWidth
+                sx={{ py: ".8rem" }}
+              >
                 Create Coupon
               </Button>
             </Grid2>
-
           </Grid2>
         </Box>
       </LocalizationProvider>

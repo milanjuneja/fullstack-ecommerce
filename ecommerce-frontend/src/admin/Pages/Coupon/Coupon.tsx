@@ -1,7 +1,26 @@
 import { Delete } from "@mui/icons-material";
-import { Button, FormControl, InputLabel, MenuItem, Paper, Select, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow } from "@mui/material";
-import React, { useState } from "react";
-
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import store, { useAppDispatch, useAppSelector } from "../../../State/Store";
+import {
+  deleteCoupon,
+  fetchAllCoupons,
+} from "../../../State/admin/adminCouponSlice";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -14,73 +33,63 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
+  "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
   // hide last border
-  '&:last-child td, &:last-child th': {
+  "&:last-child td, &:last-child th": {
     border: 0,
   },
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
-
-
 const Coupon = () => {
-  const [accountStatus, setAccountStatus] = useState("ACTIVE");
+  const dispatch = useAppDispatch();
+  const [couponDeleted, setCouponDeleted] = useState(false);
+  const { adminCoupons } = useAppSelector((store) => store);
 
-  const handleChange = (event: any) => {
-    setAccountStatus(event.target.value);
+  useEffect(() => {
+    dispatch(fetchAllCoupons());
+  }, [couponDeleted]);
+
+  const handleDeleteCoupon = (e: number) => {
+    dispatch(deleteCoupon(e));
+    setCouponDeleted(true);
   };
   return (
     <>
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-          <StyledTableCell>Coupon Code</StyledTableCell>
-            <StyledTableCell>Start Date</StyledTableCell>
-            <StyledTableCell>End Date</StyledTableCell>
-            <StyledTableCell align="right">Minimun Order value</StyledTableCell>
-            <StyledTableCell align="right">Discount</StyledTableCell>
-            <StyledTableCell align="right">Delete</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell >{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right"><Button ><Delete /></Button></StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Coupon Code</StyledTableCell>
+              <StyledTableCell>Start Date</StyledTableCell>
+              <StyledTableCell>End Date</StyledTableCell>
+              <StyledTableCell>Minimun Order value</StyledTableCell>
+              <StyledTableCell>Discount</StyledTableCell>
+              <StyledTableCell>Delete</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {adminCoupons.coupons.map((coupon) => (
+              <StyledTableRow key={coupon.id}>
+                <StyledTableCell component="th" scope="row">
+                  {coupon.code}
+                </StyledTableCell>
+                <StyledTableCell>{coupon.validityStartDate}</StyledTableCell>
+                <StyledTableCell>{coupon.validityEndDate}</StyledTableCell>
+                <StyledTableCell>{coupon.minimumOrderValue}</StyledTableCell>
+                <StyledTableCell>{coupon.discountPercentage}</StyledTableCell>
+                <StyledTableCell>
+                  <Button onClick={() => handleDeleteCoupon(coupon.id)}>
+                    <Delete />
+                  </Button>
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
-    
   );
 };
 

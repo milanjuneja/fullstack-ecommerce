@@ -29,6 +29,7 @@ export const applyCoupon = createAsyncThunk<
   }
 );
 
+
 const initialState: CouponState = {
   coupons: [],
   cart: null,
