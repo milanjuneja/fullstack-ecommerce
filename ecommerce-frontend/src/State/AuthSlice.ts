@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../config/api";
-import { JoinFullTwoTone } from "@mui/icons-material";
-import { act } from "react";
 import { User } from "../types/userTypes";
 
 export const sendLoginSignupOtp = createAsyncThunk(

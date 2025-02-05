@@ -23,5 +23,5 @@ export interface User{
   lastName: string,
   mobile?: string,
   role: UserRole,
-  address?: Address[]
+  addresses: Address[]
 }
