@@ -55,6 +55,7 @@ const CreateDealForm = () => {
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Category</InputLabel>
         <Select
+        name="category"
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={formik.values.category}

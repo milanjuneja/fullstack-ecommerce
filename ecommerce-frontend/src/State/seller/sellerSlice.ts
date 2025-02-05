@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../config/api";
+import { Seller } from "../../types/SellerTypes";
 
 export const getSellerByJwt = createAsyncThunk(
   "/sellers/getSellerByJwt",
@@ -14,12 +15,34 @@ export const getSellerByJwt = createAsyncThunk(
       return res.data;
     } catch (error) {
       console.log("error getsellerByJWT------", error);
+      return rejectWithValue("not able to fetch seller profile");
+    }
+  }
+);
+
+export const getAllSellers = createAsyncThunk(
+  "/sellers/getAllSellers",
+  async (accountStatus:string, { rejectWithValue }) => {
+    try {
+      const res = await api.get("/api/sellers", {
+        params:{
+          status:accountStatus
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+      });
+      console.log("get All Sellers profile", res.data);
+      return res.data;
+    } catch (error) {
+      console.log("error in getAllSellers------", error);
+      return rejectWithValue("not able to fetch all sellers profile");
     }
   }
 );
 
 interface SellerState {
-  sellers: any[];
+  sellers: Seller[];
   selectedSeller: any;
   profile: any;
   report: any;
@@ -52,7 +75,18 @@ const sellerSlice = createSlice({
       .addCase(getSellerByJwt.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(getAllSellers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllSellers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.sellers = action.payload;
+      })
+      .addCase(getAllSellers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
   },
 });
 

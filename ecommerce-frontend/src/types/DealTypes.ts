@@ -1,7 +1,7 @@
 import { HomeCategory } from "./HomeCategoryTypes";
 
 export interface Deal{
-  id?: number;
+  id: number;
   discount: number,
   category: HomeCategory
 }

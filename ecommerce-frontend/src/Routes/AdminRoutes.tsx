@@ -1,4 +1,3 @@
-import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import SellerTable from '../admin/Pages/Seller/SellerTable'
 import Coupon from '../admin/Pages/Coupon/Coupon'
