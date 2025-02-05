@@ -43,7 +43,6 @@ interface AddItemRequest {
 export const additemToCart = createAsyncThunk<
   CartItem,
   {
-    cartItemId: number;
     jwt: string | null;
     request: AddItemRequest;
   }

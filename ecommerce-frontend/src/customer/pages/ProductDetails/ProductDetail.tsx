@@ -17,6 +17,7 @@ import ReviewCard from "../Review/ReviewCard";
 import { useAppDispatch, useAppSelector } from "../../../State/Store";
 import { useParams } from "react-router-dom";
 import { fetchProductById } from "../../../State/customer/ProductSlice";
+import { addProductToWishlist } from "../../../State/customer/wishlistSlice";
 import { additemToCart } from "../../../State/customer/cartSlice";
 
 const ProductDetail = () => {
@@ -34,9 +35,29 @@ const ProductDetail = () => {
     setActiveImage(value)
   }
   const handleAddToCart = () =>{
-    // dispatch(additemToCart())
+    const values =  {
+      productId: Number(productId),
+      size: 'XL',
+      quantity: Number(quantity)
+    }
+    console.log("valuessssss", values);
+    
+    dispatch(additemToCart({
+      jwt: localStorage.getItem('jwt') || "",
+      request: values
+    }))
     
   }
+  const handleWishlist = (e: any) => {
+      e.stopPropagation();
+      product.product?.id &&
+        dispatch(
+          addProductToWishlist({
+            jwt: localStorage.getItem("jwt") || "",
+            productId: product.product?.id,
+          })
+        );
+    };
 
   return (
     <div className="px-5 lg:px-20 pt-10">
@@ -131,6 +152,7 @@ const ProductDetail = () => {
             <Button
               fullWidth
               startIcon={<FavoriteBorder />}
+              onClick={(e) => handleWishlist(e)}
               sx={{ py: "1rem" }}
               variant="outlined"
               color="primary"

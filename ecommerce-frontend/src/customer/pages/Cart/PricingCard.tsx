@@ -1,23 +1,27 @@
 import { Divider } from "@mui/material";
-import React from "react";
+import { useAppSelector } from "../../../State/Store";
 
 const PricingCard = () => {
+  const {cart} = useAppSelector(store=>store);
+  const subTotal = cart.cart?.cartItems.reduce((acc, item) => acc + item.sellingPrice, 0);
+  const shipping = 69;
+  
   return (
     <>
       <div className="space-y-3 p-5">
         <div className="flex justify-between items-center">
           <span>Subtotal</span>
-          <span>₹899</span>
+          <span>₹{subTotal}</span>
         </div>
 
         <div className="flex justify-between items-center">
           <span>Discount</span>
-          <span>₹600</span>
+          <span>₹{cart.cart?.discount}</span>
         </div>
 
         <div className="flex justify-between items-center">
           <span>Shipping</span>
-          <span>₹69</span>
+          <span>₹{shipping}</span>
         </div>
 
         <div className="flex justify-between items-center">
@@ -29,7 +33,7 @@ const PricingCard = () => {
       <Divider />
         <div className="flex justify-between items-center p-5 text-primary-color">
           <span>Total</span>
-          <span>₹799</span>
+          <span>₹{subTotal &&  subTotal + shipping}</span>
         </div>
     </>
   );
