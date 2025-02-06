@@ -95,7 +95,7 @@ const SellerTable = () => {
   const { seller } = useAppSelector((store) => store);
   useEffect(() => {
     dispatch(getAllSellers(accountStatus));
-  }, []);
+  }, [accountStatus]);
   const handleChange = (event: any) => {
     setAccountStatus(event.target.value);
   };
