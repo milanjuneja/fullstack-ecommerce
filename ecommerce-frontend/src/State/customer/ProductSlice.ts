@@ -16,12 +16,14 @@ export const fetchProductById = createAsyncThunk(
   }
 );
 
-export const searchProduct = createAsyncThunk(
+export const searchProduct = createAsyncThunk<any, any>(
   "products/searchProduct",
-  async (query, { rejectWithValue }) => {
+  async (query:string, { rejectWithValue }) => {
     try {
-      const res = await api.get(`/search`, {
-        params: query,
+      const res = await api.get(`/products/search`, {
+        params: {
+          query
+        },
       });
       console.log("search Product", res.data);
 

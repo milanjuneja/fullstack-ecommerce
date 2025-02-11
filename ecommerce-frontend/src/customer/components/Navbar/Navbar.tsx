@@ -62,7 +62,7 @@ function Navbar() {
             </ul>
           </div>
           <div className="flex gap-1 lg:gap-6 items-center">
-            <IconButton>
+            <IconButton onClick={()=> navigate("/search-products")}>
               <SearchIcon />
             </IconButton>
             {auth.user ? (
