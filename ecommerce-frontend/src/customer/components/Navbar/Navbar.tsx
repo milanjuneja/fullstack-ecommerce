@@ -15,7 +15,7 @@ import CategorySheet from "./CategorySheet";
 import { MainCategory } from "../../../data/category/MainCategory";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../State/Store";
+import store, { useAppDispatch, useAppSelector } from "../../../State/Store";
 function Navbar() {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ function Navbar() {
   const [selectredCategory, setSelectedCategory] = useState("men");
   const [showCategorySheet, setShowCategorySheet] = useState(false);
   const {auth} = useAppSelector(store=>store);
- 
+  const {cart} = useAppSelector(store=>store);
 
   return (
     <>
@@ -85,10 +85,10 @@ function Navbar() {
               <FavoriteBorderIcon sx={{ fontSize: 29 }} />
             </IconButton>
             <IconButton onClick={() => navigate("/cart")}>
-              <AddShoppingCartIcon
+              <AddShoppingCartIcon 
                 className="text-gray-700"
                 sx={{ fontSize: 29 }}
-              />
+              />{cart.cart?.cartItems.length}
             </IconButton>
 
             {isLarge && (
