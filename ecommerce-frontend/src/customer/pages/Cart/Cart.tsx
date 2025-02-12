@@ -7,6 +7,7 @@ import PricingCard from "./PricingCard";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../State/Store";
 import { fetchUserCart } from "../../../State/customer/cartSlice";
+import { applyCoupon } from "../../../State/customer/couponSlice";
 
 const Cart = () => {
   const [couponCode, setCouponCode] = useState("");
@@ -19,8 +20,12 @@ const Cart = () => {
   const {cart} = useAppSelector(store=>store);
   useEffect(() => {
     dispatch(fetchUserCart(localStorage.getItem('jwt') || ""))
-  }, [])
+  }, [setCouponCode])
 
+  const handleApplyCoupon = () => {
+    dispatch(applyCoupon({apply: "true", code: couponCode, orderValue: cart.cart?.totalSellingPrice || 0, jwt: localStorage.getItem('jwt') || ""}))
+    
+  }
   return (
     <div className="pt-10 px-5 sm:px-10 md:px-60 min-h-screen">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -41,7 +46,7 @@ const Cart = () => {
               </div>
           {true ? <div className="flex justify-between items-center">
             <TextField onChange={handleChange} id="outlined-basic" placeholder="coupon code" size="small" variant="outlined"/>
-            <Button size="small">Apply</Button>
+            <Button onClick={handleApplyCoupon} size="small">Apply</Button>
           </div> 
           :
           <div className="flex">
