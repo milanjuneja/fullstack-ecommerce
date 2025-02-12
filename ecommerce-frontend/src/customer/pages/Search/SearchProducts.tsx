@@ -1,6 +1,6 @@
 import { Box, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import store, { useAppDispatch, useAppSelector } from "../../../State/Store";
 import { searchProduct } from "../../../State/customer/ProductSlice";
 import ProductCard from "../Product/ProductCard";
@@ -11,6 +11,7 @@ const SearchProducts = () => {
   const dispatch = useAppDispatch();
   const { product } = useAppSelector((store) => store);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       search: searchParams.get("search") || "",
@@ -81,7 +82,7 @@ const SearchProducts = () => {
               <ul className="p-3 space-y-2">
                 {product.searchProduct.map((item) => (
                   <li
-                    // onClick={() => child.categoryId)}
+                    onClick={() => navigate(`/product-details/${item.category.categoryId}/${item.title}/${item.id}`)}
                     className="px-4 py-2 text-gray-700 hover:bg-blue-100 cursor-pointer rounded-md"
                   >
                     {item.title}
