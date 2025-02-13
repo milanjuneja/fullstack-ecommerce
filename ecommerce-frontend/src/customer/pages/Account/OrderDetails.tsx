@@ -5,6 +5,7 @@ import OrderStepper from "./OrderStepper";
 import { Payments } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../State/Store";
 import { fetchOrderById, fetchOrderItemById } from "../../../State/customer/orderSlice";
+
 const OrderDetails = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -34,7 +35,7 @@ const {orderId, orderItemId} = useParams();
           </p>
         </div>
         <div>
-          <Button onClick={() => navigate(`/reviews/${5}/create`)}>
+          <Button onClick={() => navigate(`/reviews/${orderId}/create`)}>
             Write Review
           </Button>
         </div>

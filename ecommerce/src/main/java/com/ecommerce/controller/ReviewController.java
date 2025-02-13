@@ -29,7 +29,8 @@ public class ReviewController {
 
     @GetMapping("/product/{productId}")
     public ResponseEntity<List<Review>> getReviewsByProductId(
-            @PathVariable Long productId
+            @PathVariable Long productId,
+            @RequestHeader("Authorization") String jwt
     ) {
         return new ResponseEntity<>(reviewService.getReviewByProductId(productId), HttpStatus.OK);
     }

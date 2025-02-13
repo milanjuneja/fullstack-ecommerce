@@ -1,16 +1,17 @@
 import { Delete } from '@mui/icons-material'
-import { Avatar, Box, Grid, Grid2, IconButton, Rating } from '@mui/material'
+import { Avatar, Box, Grid2, IconButton, Rating } from '@mui/material'
 import { red } from '@mui/material/colors'
-import React from 'react'
-
-const ReviewCard = () => {
+import { Review } from '../../../State/customer/reviewSlice'
+import dayjs from "dayjs";
+const ReviewCard = ({review}:{review:Review}) => {
+  const formattedDate = dayjs(review.createdAt).format("MMMM D, YYYY");
   return (
     <div className='flex justify-between'>
       <Grid2 container spacing={9}>
         <Grid2 size={{xs:1}}>
           <Box>
             <Avatar className='text-white' sx={{width:56, height:56, bgcolor:"#9155FD"}}>
-                Z
+                {review.user.firstName[0]}{review.user.lastName[0]}
             </Avatar>
           </Box>
         </Grid2>
@@ -18,20 +19,20 @@ const ReviewCard = () => {
         <Grid2 size={{xs:9}}>
           <div className='space-y-2'>
             <div>
-              <p className='font-semibold text-lg'>User 1</p>
-              <p className='opacity-70'>Date</p>
+              <p className='font-semibold text-lg'>{review.user.firstName} {review.user.lastName}</p>
+              <p className='opacity-70'>{formattedDate}</p>
             </div>
           </div>
           <Rating 
           readOnly 
-          value={4.5}
+          value={review.reviewRating}
           precision={.5}
           sx={{marginLeft:"-5px"}}
           />
           
-          <p>Value for money product, great product</p>
+          <p>{review.reviewText}</p>
             <div>
-              <img className='w-24 h-24 object-cover' src="https://thesstudioonline.com/cdn/shop/products/sd5024-1-65dc7ec37060d.webp?v=1709019680" alt="" />
+              <img className='w-24 h-24 object-cover' src={review.images && review.images[0]} alt="" />
             </div>
 
         </Grid2>

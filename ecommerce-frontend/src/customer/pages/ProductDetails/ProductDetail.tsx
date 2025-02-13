@@ -19,6 +19,7 @@ import { useParams } from "react-router-dom";
 import { fetchProductById } from "../../../State/customer/ProductSlice";
 import { addProductToWishlist } from "../../../State/customer/wishlistSlice";
 import { additemToCart } from "../../../State/customer/cartSlice";
+import { getReviewsByProductId } from "../../../State/customer/reviewSlice";
 
 const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
@@ -26,9 +27,11 @@ const ProductDetail = () => {
   const {productId} = useParams();
   const {product} = useAppSelector(store=>store);
   const [activeImage, setActiveImage] = useState(0);
+  const {review} = useAppSelector(store => store);
 
   useEffect(()=>{
     dispatch(fetchProductById(Number(productId)));
+    dispatch(getReviewsByProductId({ productId: Number(productId)}));
   },[productId])
 
   const handleActiveImage = (value: number) => {
@@ -40,7 +43,7 @@ const ProductDetail = () => {
       size: 'XL',
       quantity: Number(quantity)
     }
-    console.log("valuessssss", values);
+    
     
     dispatch(additemToCart({
       jwt: localStorage.getItem('jwt') || "",
@@ -168,7 +171,7 @@ const ProductDetail = () => {
           </div>
 
           <div className="mt-12 space-y-5">
-            <ReviewCard />
+            {review.reviews.slice(0,3).map((review) => <ReviewCard review={review}/>) }
             <Divider />
           </div>
         </section>

@@ -22,6 +22,7 @@ import Wishlist from "./customer/pages/Wishlist/Wishlist";
 import { createHomeCategories } from "./State/customer/customerSlice";
 import { homeCategories } from "./data/HomeCategories";
 import SearchProducts from "./customer/pages/Search/SearchProducts";
+import ReviewForm from "./customer/pages/Review/ReviewForm";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -52,6 +53,7 @@ function App() {
             <Route path="/login" element={<Auth />} />
             <Route path="/products/:category" element={<Product />} />
             <Route path="/reviews/:productId" element={<Review />} />
+            <Route path="/reviews/:productId/create" element={<ReviewForm />} />
             <Route
               path="/product-details/:category/:name/:productId"
               element={<ProductDetail />}
