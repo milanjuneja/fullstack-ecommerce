@@ -1,10 +1,16 @@
 import { Delete } from '@mui/icons-material'
 import { Avatar, Box, Grid2, IconButton, Rating } from '@mui/material'
 import { red } from '@mui/material/colors'
-import { Review } from '../../../State/customer/reviewSlice'
+import { deleteReview, Review } from '../../../State/customer/reviewSlice'
 import dayjs from "dayjs";
+import { useAppDispatch } from '../../../State/Store';
 const ReviewCard = ({review}:{review:Review}) => {
   const formattedDate = dayjs(review.createdAt).format("MMMM D, YYYY");
+  const dispatch = useAppDispatch();
+  const handleDelete = () => {
+    dispatch(deleteReview({reviewId: review.id || 0}));
+  }
+
   return (
     <div className='flex justify-between'>
       <Grid2 container spacing={9}>
@@ -25,7 +31,7 @@ const ReviewCard = ({review}:{review:Review}) => {
           </div>
           <Rating 
           readOnly 
-          value={review.reviewRating}
+          value={review.rating}
           precision={.5}
           sx={{marginLeft:"-5px"}}
           />
@@ -41,7 +47,7 @@ const ReviewCard = ({review}:{review:Review}) => {
 
       </Grid2>
       <div>
-      <IconButton >
+      <IconButton onClick={handleDelete}>
           <Delete sx={{color:red[700]}}/>
         </IconButton>
       </div>

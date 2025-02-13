@@ -171,7 +171,12 @@ const ProductDetail = () => {
           </div>
 
           <div className="mt-12 space-y-5">
-            {review.reviews.slice(0,3).map((review) => <ReviewCard review={review}/>) }
+            {review.reviews.length > 0 ? review.reviews.slice(0,3).map((review) => <ReviewCard review={review}/>) : 
+            <div>
+              <h1 className="text-lg font-bold">No Reviews</h1>
+              <p>Be the first one to review this product after buying !!!!</p>
+            </div>
+            }
             <Divider />
           </div>
         </section>

@@ -36,7 +36,7 @@ const ReviewForm = () => {
           productId: Number(productId),
           request: {
             reviewText: values.description,
-            reviewRating: values.rating,
+            rating: Number(values.rating),
             productImages: values.images,
           },
         })

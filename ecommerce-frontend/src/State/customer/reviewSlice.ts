@@ -2,17 +2,19 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Product } from "../../types/ProductTypes";
 import { User } from "../../types/userTypes";
 import { api } from "../../config/api";
+import { ApiResponse } from "../../types/DealTypes";
 
 
 
 interface CreateReviewRequest {
   reviewText: string;
-  reviewRating: number;
+  rating: number;
   productImages: string[];
 }
 export interface Review {
+  id: number,
   reviewText: string;
-  reviewRating: number;
+  rating: number;
   images: string[];
   product: Product;
   user: User;
@@ -79,6 +81,29 @@ export const getReviewsByProductId = createAsyncThunk<
   }
 );
 
+export const deleteReview = createAsyncThunk<
+  ApiResponse,
+  {
+    reviewId: number;
+  }
+>(
+  "reviews/deleteReview",
+  async ({ reviewId }, { rejectWithValue }) => {
+    try {
+      const res = await api.delete(`/api/reviews/${reviewId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        }
+      });
+      console.log("Review Deleted", res.data);
+      return res.data;
+    } catch (error) {
+      console.log("Error in deleteReview", error);
+      return rejectWithValue("Failed to delete review");
+    }
+  }
+);
+
 export const reviewSlice = createSlice({
   name: "review",
   initialState:initialState,
@@ -109,7 +134,19 @@ export const reviewSlice = createSlice({
     builder.addCase(getReviewsByProductId.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload as string;
-    }); 
+    });
+    builder.addCase(deleteReview.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteReview.fulfilled, (state, action) => {
+      state.loading = false;
+      state.reviews = state.reviews.filter(review => review.id !== action.meta.arg.reviewId)
+    })
+    builder.addCase(deleteReview.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload as string;
+    })
   },
 });
 
