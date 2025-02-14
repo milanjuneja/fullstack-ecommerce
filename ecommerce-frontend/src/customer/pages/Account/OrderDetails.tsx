@@ -1,21 +1,47 @@
 import { Box, Button, Divider } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import OrderStepper from "./OrderStepper";
 import { Payments } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../State/Store";
-import { fetchOrderById, fetchOrderItemById } from "../../../State/customer/orderSlice";
+import {
+  cancelOrder,
+  fetchOrderById,
+  fetchOrderItemById,
+} from "../../../State/customer/orderSlice";
 
 const OrderDetails = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-const {orderId, orderItemId} = useParams();
-  const {order} = useAppSelector(store=>store);
+  const [orderCancelled, setOrderCancelled] = useState(false);
+  const { orderId, orderItemId } = useParams();
+  const { order } = useAppSelector((store) => store);
 
   useEffect(() => {
-    dispatch(fetchOrderById({orderId : Number(orderId), jwt: localStorage.getItem('jwt') || ""}))
-    dispatch(fetchOrderItemById({orderItemId:Number(orderItemId), jwt: localStorage.getItem('jwt') || ""}));
-  },[])
+    dispatch(
+      fetchOrderById({
+        orderId: Number(orderId),
+        jwt: localStorage.getItem("jwt") || "",
+      })
+    );
+    dispatch(
+      fetchOrderItemById({
+        orderItemId: Number(orderItemId),
+        jwt: localStorage.getItem("jwt") || "",
+      })
+    );
+    
+  }, []);
+
+  const handleCancelOrder = () => {
+    setOrderCancelled(true);
+    dispatch(
+      cancelOrder({
+        orderId: Number(orderId),
+        jwt: localStorage.getItem("jwt") || "",
+      })
+    );
+  };
 
   return (
     <Box className="space-y-5">
@@ -26,12 +52,13 @@ const {orderId, orderItemId} = useParams();
           alt=""
         />
         <div className="text-sm space-y-1 text-center">
-          <h1 className="font-bold">{order.orderItem?.product.seller.businessDetails.businessName}</h1>
+          <h1 className="font-bold">
+            {order.orderItem?.product.seller.businessDetails.businessName}
+          </h1>
+          <p>{order.orderItem?.product.title}</p>
           <p>
-            {order.orderItem?.product.title}
-          </p>
-          <p>
-            <strong>Size :</strong>{order.orderItem?.size}
+            <strong>Size :</strong>
+            {order.orderItem?.size}
           </p>
         </div>
         <div>
@@ -49,15 +76,15 @@ const {orderId, orderItemId} = useParams();
         <div className="text-sm space-y-2">
           <div className="flex gap-5 font-medium">
             <p>{order.currentOrder?.shipmentAddress.name}</p>
-            <Divider flexItem orientation="vertical"/>
+            <Divider flexItem orientation="vertical" />
             <p>{order.currentOrder?.shipmentAddress.mobile}</p>
           </div>
           <p>
-            {order.currentOrder?.shipmentAddress.address}, {" "}
-            {order.currentOrder?.shipmentAddress.locality}, {" "}
-            {order.currentOrder?.shipmentAddress.city}, {" "}
+            {order.currentOrder?.shipmentAddress.address},{" "}
+            {order.currentOrder?.shipmentAddress.locality},{" "}
+            {order.currentOrder?.shipmentAddress.city},{" "}
             {order.currentOrder?.shipmentAddress.state} {"-"}
-            {order.currentOrder?.shipmentAddress.pinCode}, {" "}
+            {order.currentOrder?.shipmentAddress.pinCode},{" "}
           </p>
         </div>
       </div>
@@ -65,8 +92,13 @@ const {orderId, orderItemId} = useParams();
         <div className="flex justify-between text-sm pt-5 px-5">
           <div className="space-y-1">
             <p className="font-bold">Total Item Price</p>
-            <p>You saved <span className="text-green-500 font-medium text-xs">Rs {699}.00</span> on this item</p>
-
+            <p>
+              You saved{" "}
+              <span className="text-green-500 font-medium text-xs">
+                Rs {699}.00
+              </span>{" "}
+              on this item
+            </p>
           </div>
           <p className="font-medium">Rs {order.orderItem?.sellingPrice}.00</p>
         </div>
@@ -78,23 +110,25 @@ const {orderId, orderItemId} = useParams();
         </div>
         <Divider />
         <div className="px-5 pb-5">
-          <p className="text-xs"><strong>Sold by: </strong>{order.orderItem?.product.seller.businessDetails.businessName}</p>
+          <p className="text-xs">
+            <strong>Sold by: </strong>
+            {order.orderItem?.product.seller.businessDetails.businessName}
+          </p>
         </div>
 
         <div className="p-10">
-          <Button 
-          disabled={false}
-          // onClick={handleCancelOrder}
-          color="error"
-          sx={{py: "0.7rem"}}
-          className=""
-          variant="outlined"
-          fullWidth
+          <Button
+            disabled={order.orderCancelled &&  !order.orderCancelled}
+            onClick={handleCancelOrder}
+            color="error"
+            sx={{ py: "0.7rem" }}
+            className=""
+            variant="outlined"
+            fullWidth
           >
-            {false ? "Order cancelled": "Cancel Order"}
+            {order.orderCancelled && !order.orderCancelled ? "Order cancelled" : "Cancel Order"}
           </Button>
         </div>
-
       </div>
     </Box>
   );
