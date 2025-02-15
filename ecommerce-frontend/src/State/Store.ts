@@ -16,6 +16,7 @@ import customerSlice from "./customer/customerSlice";
 import dealSlice from "./admin/dealSlice"
 import adminCouponSlice from "./admin/adminCouponSlice";
 import reviewSlice from "./customer/reviewSlice";
+import snackbarSlice from "./SnackbarSlice";
 const rootReducer = combineReducers({
   seller: sellerSlice,
   sellerProduct: sellerProductSlice,
@@ -31,7 +32,8 @@ const rootReducer = combineReducers({
   customer: customerSlice,
   deal:dealSlice,
   adminCoupons : adminCouponSlice,
-  review: reviewSlice
+  review: reviewSlice,
+  snackbar: snackbarSlice,
 });
 
 const store = configureStore({

@@ -20,6 +20,7 @@ import { fetchProductById } from "../../../State/customer/ProductSlice";
 import { addProductToWishlist } from "../../../State/customer/wishlistSlice";
 import { additemToCart } from "../../../State/customer/cartSlice";
 import { getReviewsByProductId } from "../../../State/customer/reviewSlice";
+import { showSnackbar } from "../../../State/SnackbarSlice";
 
 const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
@@ -49,6 +50,10 @@ const ProductDetail = () => {
       jwt: localStorage.getItem('jwt') || "",
       request: values
     }))
+    dispatch(showSnackbar({
+      message: "Product added to cart successfully",
+      severty: "success"
+    }))
     
   }
   const handleWishlist = (e: any) => {
@@ -60,6 +65,10 @@ const ProductDetail = () => {
             productId: product.product?.id,
           })
         );
+        dispatch(showSnackbar({
+          message: "Product added to wishlist successfully",
+          severty: "success"
+        }))
     };
 
   return (

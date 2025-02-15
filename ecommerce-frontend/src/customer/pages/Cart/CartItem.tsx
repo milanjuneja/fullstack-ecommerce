@@ -6,6 +6,7 @@ import {
   deleteCartItem,
   updateCartItem,
 } from "../../../State/customer/cartSlice";
+import { showSnackbar } from "../../../State/SnackbarSlice";
 
 const CartItem = ({ item }: { item: CartItems }) => {
   const dispatch = useAppDispatch();
@@ -26,6 +27,7 @@ const CartItem = ({ item }: { item: CartItems }) => {
         cartItemId: item.id,
       })
     );
+    dispatch(showSnackbar({ message: "Item removed from cart", severity: "success" }));
   };
 
   return (

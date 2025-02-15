@@ -4,6 +4,7 @@ import { Close } from '@mui/icons-material'
 import { useAppDispatch } from '../../../State/Store'
 import { addProductToWishlist } from '../../../State/customer/wishlistSlice'
 import { teal } from '@mui/material/colors'
+import { showSnackbar } from '../../../State/SnackbarSlice'
 
 const WishlistProductCard = ({item}:{item:Product}) => {
   const dispatch = useAppDispatch()
@@ -16,6 +17,7 @@ const WishlistProductCard = ({item}:{item:Product}) => {
             productId: item.id,
           })
         );
+        dispatch(showSnackbar({ message: "Product removed from wishlist", severity: "success" }));
     };
   return (
     <div className='w-60 relative'>

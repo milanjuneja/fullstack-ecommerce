@@ -3,9 +3,12 @@ import { useFormik } from "formik";
 import { useAppDispatch } from "../../../State/Store";
 import { sendLoginSignupOtp, signin } from "../../../State/AuthSlice";
 import { sellerLogin } from "../../../State/seller/SellerAuthSlice";
+import { showSnackbar } from "../../../State/SnackbarSlice";
+import { useNavigate } from "react-router-dom";
 
 const SellerLoginForm = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -14,11 +17,15 @@ const SellerLoginForm = () => {
     onSubmit: (values) => {
       console.log(values);
       dispatch(sellerLogin(values));
+      dispatch(showSnackbar({ message: "Seller Logged in successfully", severity: "success" }));
+      navigate("/seller/orders");
     },
   });
 
   const handleSendOtp = () => {
     dispatch(sendLoginSignupOtp({ email: formik.values.email }));
+    dispatch(showSnackbar({ message: "Otp sent to your email", severity: "success" }));
+    
   };
 
   return (

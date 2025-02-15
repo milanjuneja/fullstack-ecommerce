@@ -23,6 +23,7 @@ import { createHomeCategories } from "./State/customer/customerSlice";
 import { homeCategories } from "./data/HomeCategories";
 import SearchProducts from "./customer/pages/Search/SearchProducts";
 import ReviewForm from "./customer/pages/Review/ReviewForm";
+import GlobalSnackbar from "./component/GlobalSnacker";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -73,6 +74,7 @@ function App() {
             <Route path="/search-products" element={<SearchProducts />} />
           </Routes>
         </div>
+        <GlobalSnackbar />
       </ThemeProvider>
     </>
   );
