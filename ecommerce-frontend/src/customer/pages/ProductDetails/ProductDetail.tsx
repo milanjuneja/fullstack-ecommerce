@@ -15,7 +15,7 @@ import {
 import SimilarProduct from "./SimilarProduct";
 import ReviewCard from "../Review/ReviewCard";
 import { useAppDispatch, useAppSelector } from "../../../State/Store";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchProductById } from "../../../State/customer/ProductSlice";
 import { addProductToWishlist } from "../../../State/customer/wishlistSlice";
 import { additemToCart } from "../../../State/customer/cartSlice";
@@ -29,6 +29,7 @@ const ProductDetail = () => {
   const {product} = useAppSelector(store=>store);
   const [activeImage, setActiveImage] = useState(0);
   const {review} = useAppSelector(store => store);
+  const navigate = useNavigate();
 
   useEffect(()=>{
     dispatch(fetchProductById(Number(productId)));
@@ -70,6 +71,11 @@ const ProductDetail = () => {
           severty: "success"
         }))
     };
+
+    const handleReviewClick = (e: any) => {
+      e.stopPropagation();
+      navigate(`/reviews/${productId}`)
+    }
 
   return (
     <div className="px-5 lg:px-20 pt-10">
@@ -180,13 +186,28 @@ const ProductDetail = () => {
           </div>
 
           <div className="mt-12 space-y-5">
-            {review.reviews.length > 0 ? review.reviews.slice(0,3).map((review) => <ReviewCard review={review}/>) : 
+            <div>
+              <h1 className="text-lg font-bold mb-4">Reviews & Ratings</h1>
+              <Divider />
+            </div>
+            {review.reviews.length > 0 ? review.reviews.slice(0,2).map((review) => <ReviewCard review={review}/>) : 
             <div>
               <h1 className="text-lg font-bold">No Reviews</h1>
               <p>Be the first one to review this product after buying !!!!</p>
             </div>
             }
             <Divider />
+            {review.reviews.length > 0 && <div className="mt-12 flex items-center gap-5">
+            <Button
+              fullWidth
+              onClick={(e) => handleReviewClick(e)}
+              sx={{ py: "1rem" }}
+              variant="text"
+              color="primary"
+            >
+              View All {review.reviews.length} Reviews
+            </Button>
+            </div>}
           </div>
         </section>
       </div>
