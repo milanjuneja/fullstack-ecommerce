@@ -65,6 +65,7 @@ export default function OrderTable() {
   }, []);
   const [anchorEl, setAnchorEl] = React.useState<null | any>({});
   const open = Boolean(anchorEl);
+  
   const handleClick = (event: any, orderId: number) => {
     setAnchorEl((prev: any) => ({ ...prev, [orderId]: event.currentTarget }));
   };
@@ -79,6 +80,7 @@ export default function OrderTable() {
         orderStatus,
       })
     );
+    handleClose(orderId);
   };
   return (
     <TableContainer component={Paper}>
@@ -139,7 +141,7 @@ export default function OrderTable() {
               </StyledTableCell>
               <StyledTableCell align="right">
                 <Button
-                  onClick={(e) => handleClick(e, Number(order.orderId))}
+                  onClick={(e) => handleClick(e, Number(order.id))}
                 >
                   Status
                 </Button>

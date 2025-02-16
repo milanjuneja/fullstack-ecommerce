@@ -8,6 +8,7 @@ import Orders from '../seller/pages/Orders/Orders'
 import Profile from '../seller/pages/Account/Profile'
 import Payment from '../seller/pages/Payment/Payment'
 import Transaction from '../seller/pages/Transaction/Transaction'
+import GlobalSnackbar from '../component/GlobalSnacker'
 
 const SellerRoutes = () => {
   return (

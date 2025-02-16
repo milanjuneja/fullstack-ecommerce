@@ -22,11 +22,11 @@ export const getSellerByJwt = createAsyncThunk(
 
 export const getAllSellers = createAsyncThunk(
   "/sellers/getAllSellers",
-  async (accountStatus:string, { rejectWithValue }) => {
+  async (accountStatus: string, { rejectWithValue }) => {
     try {
       const res = await api.get("/api/sellers", {
-        params:{
-          status:accountStatus
+        params: {
+          status: accountStatus,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt")}`,
@@ -37,6 +37,31 @@ export const getAllSellers = createAsyncThunk(
     } catch (error) {
       console.log("error in getAllSellers------", error);
       return rejectWithValue("not able to fetch all sellers profile");
+    }
+  }
+);
+
+export const updateSellerStatus = createAsyncThunk<
+  Seller,
+  {
+    status: string;
+    sellerId: number;
+  },
+  { rejectValue: string }
+>(
+  "/sellers/updateSellerStatus",
+  async ({ status, sellerId }, { rejectWithValue }) => {
+    try {
+      const res = await api.patch(`/api/sellers/${sellerId}/status/${status}`, null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+      });
+      console.log("update seller status", res.data);
+      return res.data;
+    } catch (error) {
+      console.log("error in updateSellerStatus------", error);
+      return rejectWithValue("not able to update seller status");
     }
   }
 );
@@ -86,7 +111,7 @@ const sellerSlice = createSlice({
       .addCase(getAllSellers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
+      });
   },
 });
 

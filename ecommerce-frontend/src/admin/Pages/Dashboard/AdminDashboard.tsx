@@ -3,6 +3,7 @@ import AdminDrawerList from '../../components/AdminDrawerList'
 import AdminRoutes from '../../../Routes/AdminRoutes'
 import { useAppDispatch } from '../../../State/Store'
 import { fetchHomeCategories } from '../../../State/admin/homeCategorySlice'
+import GlobalSnackbar from '../../../component/GlobalSnacker'
 
 const AdminDashboard = () => {
   const toggleDrawer = () => {}
@@ -16,10 +17,12 @@ const AdminDashboard = () => {
       <div className='lg:flex lg:h-[90vh]'>
         <section className='hidden lg:block h-full'>
           {/* <SellerDrawerList toggleDrawer={toggleDrawer}/> */}
+          <GlobalSnackbar />
           <AdminDrawerList toggleDrawer = {toggleDrawer}/>
         </section>
 
         <section className='p-10 w-full lg:w-[80%] overflow-y-auto'>
+          <GlobalSnackbar />
           <AdminRoutes />
         </section>
       </div>

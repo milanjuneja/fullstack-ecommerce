@@ -5,6 +5,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Box, Button, Grid2, TextField } from "@mui/material";
 import { useAppDispatch } from "../../../State/Store";
 import { createCoupon } from "../../../State/admin/adminCouponSlice";
+import { showSnackbar } from "../../../State/SnackbarSlice";
 
 interface CouponFormValues {
   code: string;
@@ -39,6 +40,7 @@ const AddNewCoupon = () => {
       dispatch(
         createCoupon({ jwt: localStorage.getItem("jwt") || "", coupon: values })
       );
+      showSnackbar({message:"Coupon Created Successfully",severity:"success"})
     },
   });
   return (

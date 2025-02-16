@@ -19,7 +19,8 @@ public class AdminController {
     @PatchMapping("/{id}/status/{status}")
     public ResponseEntity<Seller> updateSellerStatus(
             @PathVariable Long id,
-            @PathVariable AccountStatus status
+            @PathVariable AccountStatus status,
+            @RequestHeader("Authorization") String jwt
             ) throws Exception {
         return new ResponseEntity<>(sellerService.updateSellerAccountStatus(id, status), HttpStatus.OK);
     }

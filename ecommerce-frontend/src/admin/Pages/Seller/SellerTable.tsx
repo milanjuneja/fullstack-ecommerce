@@ -2,6 +2,7 @@ import {
   Button,
   FormControl,
   InputLabel,
+  Menu,
   MenuItem,
   Paper,
   Select,
@@ -16,7 +17,8 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import store, { useAppDispatch, useAppSelector } from "../../../State/Store";
-import { getAllSellers } from "../../../State/seller/sellerSlice";
+import { getAllSellers, updateSellerStatus } from "../../../State/seller/sellerSlice";
+import { showSnackbar } from "../../../State/SnackbarSlice";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -37,24 +39,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
 
 const accountStat = [
   {
@@ -99,6 +83,19 @@ const SellerTable = () => {
   const handleChange = (event: any) => {
     setAccountStatus(event.target.value);
   };
+  const [anchorEl, setAnchorEl] = React.useState<null | any>({});
+
+  const handleClick = (event: any, sellerId: number) => {
+    setAnchorEl((prev: any) => ({ ...prev, [sellerId]: event.currentTarget }));
+  };
+  const handleClose = (sellerId: number) => () =>  {
+    setAnchorEl((prev: any) => ({ ...prev, [sellerId]: null }));
+  };
+  const handleUpdateSellerStatus = (sellerId: number, sellerStatus: any) => {
+      dispatch(updateSellerStatus({ status: sellerStatus, sellerId }));
+      handleClose(sellerId);
+      showSnackbar({ message: "Seller status updated successfully", severity: "success" });
+    };
   return (
     <>
       <div className="text-center">
@@ -151,7 +148,29 @@ const SellerTable = () => {
                   {seller.accountStatus}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  <Button>Change Status</Button>
+                   <Button onClick={(e) => handleClick(e, Number(seller.id))}>
+                    Status
+                  </Button>
+                  <Menu
+                    id={`status-menu ${seller.id}`}
+                    anchorEl={anchorEl[seller.id || 0]}
+                    open={Boolean(anchorEl[seller.id || 0])}
+                    onClose={handleClose(seller.id || 0)}
+                    MenuListProps={{
+                      "aria-labelledby": `status-menu ${seller.id}`,
+                    }}
+                  >
+                    {accountStat.map((item) => (
+                      <MenuItem
+                        key={item.status}
+                        onClick={() =>
+                          handleUpdateSellerStatus(seller.id || 0, item.status)
+                        }
+                      >
+                        {item.title}
+                      </MenuItem>
+                    ))}
+                  </Menu> 
                 </StyledTableCell>
               </StyledTableRow>
             ))}

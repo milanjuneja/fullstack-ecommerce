@@ -25,8 +25,9 @@ import { furnitureLevelThree } from "../../../data/category/level three/furnitur
 import { electronicsLevelThree } from "../../../data/category/level three/electronicsLevelThree";
 import { colors } from "../../../data/filter/color";
 import { MainCategory } from "../../../data/category/MainCategory";
-import { useAppDispatch } from "../../../State/Store";
+import store, { useAppDispatch, useAppSelector } from "../../../State/Store";
 import { createProduct } from "../../../State/seller/sellerProductSlice";
+import { showSnackbar } from "../../../State/SnackbarSlice";
 
 const category2: {[key:string]:any[]} = {
   men: menLevelTwo,
@@ -71,6 +72,7 @@ const category3: {[key:string]:any[]} = {
 const AddProduct = () => {
   const [uploadImage, setUploadImage] = useState(false);
   const [snackbarOpen, setOpenSnackbar] = useState(false);
+  const {product} = useAppSelector(store => store);
 
   const dispatch = useAppDispatch();
 
@@ -91,6 +93,11 @@ const AddProduct = () => {
     onSubmit: (values) => {
       console.log(values);
       dispatch(createProduct({request:values, jwt: localStorage.getItem('jwt')}));
+      if(product.error){
+        showSnackbar({message: product.error, severity:"error"});
+        return;
+      }
+      showSnackbar({message: "Product Added Successfully", severity:"success"});
     },
   });
 

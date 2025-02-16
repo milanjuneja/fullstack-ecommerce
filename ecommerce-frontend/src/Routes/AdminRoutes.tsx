@@ -6,10 +6,12 @@ import GridTable from '../admin/Pages/HomePage/GridTable'
 import ElectronicTable from '../admin/Pages/HomePage/ElectronicTable'
 import ShopByCategory from '../admin/Pages/HomePage/ShopByCategory'
 import Deal from '../admin/Pages/HomePage/Deal'
+import GlobalSnackbar from '../component/GlobalSnacker'
 
 const AdminRoutes = () => {
   return (
     <div>
+      <GlobalSnackbar />
       <Routes>
         <Route path='/' element={<SellerTable />}/>
         <Route path='/coupon' element={<Coupon />}/>
