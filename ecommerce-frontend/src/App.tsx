@@ -24,6 +24,7 @@ import { homeCategories } from "./data/HomeCategories";
 import SearchProducts from "./customer/pages/Search/SearchProducts";
 import ReviewForm from "./customer/pages/Review/ReviewForm";
 import GlobalSnackbar from "./component/GlobalSnacker";
+import NotFound from "./component/NotFound";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -72,6 +73,7 @@ function App() {
             <Route path="/wishlist" element={<Wishlist />} />
 
             <Route path="/search-products" element={<SearchProducts />} />
+            <Route path="*" element={<NotFound />}/>
           </Routes>
         </div>
         <GlobalSnackbar />
